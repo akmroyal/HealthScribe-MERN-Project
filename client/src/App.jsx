@@ -1,12 +1,12 @@
-
-import Hero from './page/hero/Hero'
-import Features from './component/Features'
+import { Route, Routes } from "react-router"
+import Home from "./page/Home"
 
 const App = () => {
   return (
     <div>
-      <Hero/>
-      <Features/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
   )
 }

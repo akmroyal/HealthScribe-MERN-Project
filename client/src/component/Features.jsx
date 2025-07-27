@@ -41,20 +41,27 @@ const Features = () => {
   ];
 
   return (
-    <section className="features-section">
-      <div className="features-container">
-        <div className="features-header">
-          <h2>Why Choose HealthScribe?</h2>
-          <p>Experience the future of healthcare with our comprehensive medical platform</p>
+    <section className="py-24 px-6 md:px-12 relative bg-[#ebebebc4]">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-extrabold mb-4 ">
+            Why Choose HealthScribe?
+          </h2>
+          <p className="text-lg text-textLight max-w-2xl mx-auto">
+            Experience the future of healthcare with our comprehensive medical platform
+          </p>
         </div>
-        <div className="features-grid">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="feature-card">
-              <div className="feature-icon">
+            <div 
+              key={index} 
+              className="bg-white/80 backdrop-blur-md rounded-2xl p-10 text-center transition-all duration-300 border border-slate-100/50 shadow-lg hover:-translate-y-1 hover:shadow-xl group"
+            >
+              <div className="w-15 h-15 bg-gradient-to-r from-primary to-secondary rounded-xl flex items-center justify-center text-white mx-auto mb-6 p-3 transition-all duration-300 group-hover:scale-110">
                 {feature.icon}
               </div>
-              <h3 className="feature-title">{feature.title}</h3>
-              <p className="feature-description">{feature.description}</p>
+              <h3 className="text-xl font-bold text-textDark mb-4">{feature.title}</h3>
+              <p className="text-textLight leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
