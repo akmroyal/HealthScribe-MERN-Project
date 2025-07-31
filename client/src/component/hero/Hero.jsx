@@ -27,12 +27,12 @@ const HeroSection = () => {
 
             <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-8">
               Smarter AI <br />
-              Documentations Starts <br />
+              Documentation Starts <br />
               With <span className="text-lime-400">HealthScribe</span>.
             </h1>
 
             <p className="text-lg text-gray-300 mb-10 max-w-lg">
-              HealthScribe is an AI-powered medical platform built to transform complex healthcare data into clear, actionable insights.
+              HealthScribe is an AI-powered medical assistant that transforms doctor-patient conversations into structured clinical notes, saving 60% of documentation time.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
