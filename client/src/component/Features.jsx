@@ -1,6 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const Features = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
   const features = [
     {
       icon: (
@@ -61,7 +92,12 @@ const Features = () => {
   return (
     <section id="features" className="py-24 px-6 md:px-12 relative bg-teal-50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl font-bold text-teal-900 mb-4">
             Why Healthcare Teams Choose HealthScribe
           </h2>
@@ -69,21 +105,38 @@ const Features = () => {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Powerful tools designed for modern healthcare professionals
           </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        </motion.div>
+        <motion.div 
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {features.map((feature, index) => (
-            <div 
-              key={index} 
-              className="bg-white shadow-lg rounded-xl p-8 transition-all duration-300 border border-gray-100 hover:-translate-y-1 hover:shadow-xl group"
+            <motion.div 
+              key={index}
+              variants={itemVariants}
+              whileHover={{ 
+                scale: 1.03, 
+                rotateX: 2, 
+                rotateY: 2,
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+              }}
+              className="bg-white shadow-lg rounded-xl p-8 transition-all duration-300 border border-gray-100 group"
             >
-              <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-lime-400 rounded-xl flex items-center justify-center text-white mx-auto mb-6 p-3 transition-all duration-300 group-hover:scale-110">
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                className="w-16 h-16 bg-gradient-to-r from-teal-500 to-lime-400 rounded-xl flex items-center justify-center text-white mx-auto mb-6 p-3"
+              >
                 {feature.icon}
-              </div>
+              </motion.div>
               <h3 className="text-xl font-bold text-teal-900 mb-4">{feature.title}</h3>
               <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

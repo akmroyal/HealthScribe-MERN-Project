@@ -1,63 +1,147 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../shared/Navbar.jsx";
 import HeroStats from "../HeroStats.jsx";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const HeroSection = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-teal-900 to-teal-800">
       {/* Background patterns */}
       <div className="absolute inset-0 w-full h-full z-0 opacity-20">
-        <div className="absolute top-20 left-20 w-40 h-40 rounded-full bg-teal-600 filter blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-teal-500 filter blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/3 w-40 h-40 rounded-full bg-lime-500 filter blur-3xl"></div>
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute top-20 left-20 w-40 h-40 rounded-full bg-teal-600 filter blur-3xl"
+        ></motion.div>
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.8, ease: "easeOut", delay: 0.3 }}
+          className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-teal-500 filter blur-3xl"
+        ></motion.div>
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 2, ease: "easeOut", delay: 0.6 }}
+          className="absolute top-1/2 left-1/3 w-40 h-40 rounded-full bg-lime-500 filter blur-3xl"
+        ></motion.div>
       </div>
 
       <Navbar />
 
       <main className="relative z-10 px-6 md:px-12 pt-10 md:pt-16">
-        <div className="flex flex-col-reverse md:flex-row items-center md:items-start justify-between max-w-7xl mx-auto gap-8 md:gap-4">
+        <motion.div 
+          ref={ref}
+          initial="hidden"
+          animate={controls}
+          variants={containerVariants}
+          className="flex flex-col-reverse md:flex-row items-center md:items-start justify-between max-w-7xl mx-auto gap-8 md:gap-4"
+        >
           {/* Left Content */}
           <div className="w-full md:w-1/2 mt-10 md:mt-0 md:pt-10">
-            <div className="inline-flex items-center px-4 py-2 bg-teal-800/40 rounded-full border border-teal-700/40 text-sm text-white mb-6">
+            <motion.div 
+              variants={itemVariants}
+              className="inline-flex items-center px-4 py-2 bg-teal-800/40 rounded-full border border-teal-700/40 text-sm text-white mb-6"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-lime-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
               Online Platforms offers Transcriptions
-            </div>
+            </motion.div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-8">
+            <motion.h1 
+              variants={itemVariants}
+              className="text-5xl md:text-6xl font-bold text-white leading-tight mb-8"
+            >
               Smarter AI <br />
               Documentation Starts <br />
               With <span className="text-lime-400">HealthScribe</span>.
-            </h1>
+            </motion.h1>
 
-            <p className="text-lg text-gray-300 mb-10 max-w-lg">
+            <motion.p 
+              variants={itemVariants}
+              className="text-lg text-gray-300 mb-10 max-w-lg"
+            >
               HealthScribe is an AI-powered medical assistant that transforms doctor-patient conversations into structured clinical notes, saving 60% of documentation time.
-            </p>
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="px-8 py-4 bg-lime-400 hover:bg-lime-500 text-teal-900 font-medium rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-lime-400/30">
+            <motion.div 
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-lime-400 hover:bg-lime-500 text-teal-900 font-medium rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-lime-400/30"
+              >
                 Get Started
-              </button>
-              <button className="px-8 py-4 bg-teal-700/50 hover:bg-teal-700/70 text-white font-medium rounded-full border border-teal-600/50 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2">
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-teal-700/50 hover:bg-teal-700/70 text-white font-medium rounded-full border border-teal-600/50 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                 </svg>
                 Watch a Demo
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           </div>
 
           {/* Right Content - Doctor Image & Dashboard */}
-          <div className="w-full md:w-1/2 relative">
-            <img
+          <motion.div 
+            variants={itemVariants}
+            className="w-full md:w-1/2 relative"
+          >
+            <motion.img
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
               src="/Doctor.png"
               alt="Doctor"
               className="w-2/3 mx-auto relative"
             />
 
             {/* Dashboard elements */}
-            <div className="absolute top-10 right-0 md:-right-10 bg-teal-800/40 backdrop-blur-md p-4 rounded-xl border border-teal-700/40 shadow-lg w-48 md:w-64 hidden md:block">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="absolute top-10 right-0 md:-right-10 bg-teal-800/40 backdrop-blur-md p-4 rounded-xl border border-teal-700/40 shadow-lg w-48 md:w-64 hidden md:block"
+            >
               <div className="text-white text-xs mb-2">Dashboard Report</div>
               <div className="bg-teal-900/50 p-2 rounded-lg">
                 <div className="h-20 w-full flex items-end justify-between gap-1">
@@ -79,9 +163,14 @@ const HeroSection = () => {
                   <span>Jun</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="absolute bottom-5 right-20 md:-right-10 bg-teal-800/40 backdrop-blur-md p-4 rounded-xl border border-teal-700/40 shadow-lg w-48 md:w-64 hidden md:block">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              className="absolute bottom-5 right-20 md:-right-10 bg-teal-800/40 backdrop-blur-md p-4 rounded-xl border border-teal-700/40 shadow-lg w-48 md:w-64 hidden md:block"
+            >
               <div className="flex justify-between items-center mb-3">
                 <div className="text-white text-xs">Your daily progress</div>
                 <div className="text-gray-400">
@@ -142,21 +231,31 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
         {/* Partner logos */}
-        <div className="mt-20 md:mt-40 border-t border-teal-700/50 pt-8 pb-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+          className="mt-20 md:mt-40 border-t border-teal-700/50 pt-8 pb-10"
+        >
           <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-8 md:gap-12">
-            <img src="#" alt="Ansell" className="h-6 opacity-70 hover:opacity-100 transition-opacity duration-300" />
-            <img src="#" alt="Infinitum" className="h-6 opacity-70 hover:opacity-100 transition-opacity duration-300" />
-            <img src="#" alt="Dräger" className="h-6 opacity-70 hover:opacity-100 transition-opacity duration-300" />
-            <img src="#" alt="IKA" className="h-6 opacity-70 hover:opacity-100 transition-opacity duration-300" />
-            <img src="#" alt="MOLDEX" className="h-6 opacity-70 hover:opacity-100 transition-opacity duration-300" />
-            <img src="#" alt="ABX" className="h-6 opacity-70 hover:opacity-100 transition-opacity duration-300" />
+            {/* Using emoji placeholders for logo examples */}
+            {["🏥", "🩺", "💊", "🔬", "🧬", "💉"].map((logo, index) => (
+              <motion.div 
+                key={index}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="h-10 w-10 flex items-center justify-center text-2xl bg-teal-800/30 rounded-full p-2 opacity-70 hover:opacity-100 transition-opacity duration-300"
+              >
+                {logo}
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
       </main>
     </div>
   );

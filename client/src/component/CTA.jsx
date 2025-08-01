@@ -36,7 +36,7 @@ const CTA = () => {
             <span className="text-white text-sm">⭐ 4.9/5 Satisfaction</span>
           </div>
           <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full">
-            <span className="text-white text-sm">🔒 HIPAA Compliant</span>
+            <span className="text-white text-sm">🔒 DPDP Compliant</span>
           </div>
           <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full">
             <span className="text-white text-sm">⚡ Quick Setup</span>
