@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Sidebar = ({ doctor = { name: 'Dr. Aman Tiwari', photo: '/doctor-profile.jpg' }, collapsed = false }) => {
+const Sidebar = ({ doctor = { name: 'Dr. Aman Tiwari', photo: '/doctor-profile.jpg' }, collapsed = false, onLogout }) => {
   const menuItems = [
     { name: 'Dashboard', icon: '📊' },
     { name: 'New Recording', icon: '📝' },
@@ -19,7 +19,7 @@ const Sidebar = ({ doctor = { name: 'Dr. Aman Tiwari', photo: '/doctor-profile.j
       >
         <div className={`backdrop-blur-md bg-white/20 border-2 border-teal-300 shadow-lg rounded-full p-1 ${collapsed ? 'w-12 h-12' : 'w-24 h-24'} flex items-center justify-center transition-all duration-300`}>
           <img
-            src={doctor.photo}
+            src={doctor?.photo}
             alt={doctor.name}
             className={`rounded-full object-cover ${collapsed ? 'w-10 h-10' : 'w-20 h-20'} transition-all duration-300`}
           />
@@ -47,6 +47,17 @@ const Sidebar = ({ doctor = { name: 'Dr. Aman Tiwari', photo: '/doctor-profile.j
             {!collapsed && <span className="text-base tracking-wide">{item.name}</span>}
           </a>
         ))}
+        
+        {/* Logout Button */}
+        <button 
+          onClick={onLogout}
+          className={`flex items-center ${collapsed ? 'justify-center' : ''} space-x-3 p-3 rounded-xl font-medium transition-all duration-200 group
+            mt-auto text-red-200 hover:bg-red-500/20 hover:text-white`}
+          style={{ minHeight: '44px' }}
+        >
+          <span className="text-2xl transition-transform duration-200 group-hover:scale-125">🚪</span>
+          {!collapsed && <span className="text-base tracking-wide">Logout</span>}
+        </button>
       </nav>
     </div>
   );

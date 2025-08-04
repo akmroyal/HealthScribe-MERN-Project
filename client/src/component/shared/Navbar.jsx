@@ -1,11 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const userData = JSON.parse(localStorage.getItem('user'));
+    setUser(userData);
+  }, [location.pathname]); // Re-check when route changes
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/');
+  };
 
   // Smooth scroll function with offset for header
   const scrollToSection = (e, sectionId) => {
@@ -47,20 +63,53 @@ const Navbar = () => {
 
       {/* Right Actions */}
       <div className="flex items-center gap-4 relative z-10">
-        <div className="relative hidden md:block">
-          <input type="text" placeholder="Search" className="bg-teal-800/20 text-white/90 pl-10 pr-4 py-2 rounded-full text-sm outline-none border border-teal-700/20 backdrop-blur-lg hover:bg-teal-800/30 focus:bg-teal-800/30 transition-all duration-300 shadow-inner shadow-teal-950/20 focus:shadow-teal-950/30" />
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 absolute left-3 top-2.5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-          </svg>
-        </div>
-        <button className="p-2 rounded-full bg-teal-800/20 text-gray-300 hidden md:block border border-teal-700/20 hover:bg-teal-800/30 transition-all duration-300 shadow-inner shadow-teal-950/10 hover:shadow-teal-950/20">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-          </svg>
-        </button>
-        <a onClick={(e) => scrollToSection(e, '#cta')} href="#cta" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium px-6 py-2 rounded-full hover:shadow-md hover:shadow-lime-500/30 transition-all duration-300 border border-white/20 backdrop-blur-md hover:translate-y-[-1px]">
-          Get Started
-        </a>
+        {!user ? (
+          <>
+            {/* Show these buttons when not logged in */}
+            <div className="hidden md:flex items-center gap-4">
+              <Link to="/auth-options" className="text-white hover:text-lime-400 transition-colors duration-300 border border-white/20 px-6 py-2 rounded-full">
+                Sign In
+              </Link>
+              <Link to="/auth-options" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium px-6 py-2 rounded-full hover:shadow-md hover:shadow-lime-500/30 transition-all duration-300 border border-white/20 backdrop-blur-md hover:translate-y-[-1px]">
+                Get Started
+              </Link>
+            </div>
+            {/* Mobile view */}
+            <div className="md:hidden flex items-center gap-2">
+              <Link to="/auth-options" className="text-white border border-white/20 px-4 py-1 rounded-full hover:bg-white/10 transition-colors">
+                Sign In
+              </Link>
+              <Link to="/doctor/signup" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium px-4 py-1 rounded-full hover:shadow-md hover:shadow-lime-500/30 transition-all duration-300 border border-white/20 backdrop-blur-md">
+                Get Started
+              </Link>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Show these elements when logged in */}
+            <div className="hidden md:flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white">
+                  {user.name ? user.name.charAt(0) : (user.userType === 'doctor' ? 'D' : 'P')}
+                </div>
+                <span className="text-white">{user.name}</span>
+              </div>
+              <Link to={user.userType === 'doctor' ? '/dashboard' : '/patient'} className="text-white hover:text-lime-400 transition-colors duration-300">
+                Dashboard
+              </Link>
+              <button 
+                onClick={handleLogout}
+                className="text-white bg-red-500/20 hover:bg-red-500/30 px-4 py-1 rounded-full transition-colors duration-300"
+              >
+                Logout
+              </button>
+            </div>
+            {/* Mobile view */}
+            <Link to={user.userType === 'doctor' ? '/dashboard' : '/patient'} className="md:hidden bg-teal-600 text-white font-medium px-4 py-1 rounded-full">
+              Dashboard
+            </Link>
+          </>
+        )}
       </div>
 
       {/* Mobile menu button */}
@@ -92,12 +141,36 @@ const Navbar = () => {
             className="fixed top-20 left-4 right-4 bg-teal-900/95 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/10 z-40 md:hidden"
           >
             <div className="flex flex-col space-y-4">
-              <a onClick={(e) => scrollToSection(e, '#')} href="#" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Home</a>
-              <a onClick={(e) => scrollToSection(e, '#how-it-works')} href="#how-it-works" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">How It Works</a>
-              <a onClick={(e) => scrollToSection(e, '#features')} href="#features" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Features</a>
-              <a onClick={(e) => scrollToSection(e, '#testimonials')} href="#testimonials" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Testimonials</a>
-              <a onClick={(e) => scrollToSection(e, '#')} href="#" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Resources</a>
-              <a onClick={(e) => scrollToSection(e, '#cta')} href="#cta" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium py-3 px-6 rounded-lg text-center hover:shadow-md hover:shadow-lime-500/30">Get Started</a>
+              {location.pathname === '/' && (
+                <>
+                  {/* Home page menu items */}
+                  <a onClick={(e) => scrollToSection(e, '#')} href="#" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Home</a>
+                  <a onClick={(e) => scrollToSection(e, '#how-it-works')} href="#how-it-works" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">How It Works</a>
+                  <a onClick={(e) => scrollToSection(e, '#features')} href="#features" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Features</a>
+                  <a onClick={(e) => scrollToSection(e, '#testimonials')} href="#testimonials" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Testimonials</a>
+                </>
+              )}
+              
+              {/* Authentication items */}
+              {!user ? (
+                <>
+                  <Link to="/" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Home</Link>
+                  <Link to="/patient/login" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Patient Login</Link>
+                  <Link to="/doctor/login" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Doctor Login</Link>
+                  <Link to="/patient/signup" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium py-3 px-6 rounded-lg text-center hover:shadow-md hover:shadow-lime-500/30">Sign Up</Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Home</Link>
+                  <Link to={user.userType === 'doctor' ? '/dashboard' : '/patient'} className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Dashboard</Link>
+                  <button 
+                    onClick={handleLogout}
+                    className="text-white/90 font-medium hover:text-red-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-red-800/30 text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </motion.div>
         )}
