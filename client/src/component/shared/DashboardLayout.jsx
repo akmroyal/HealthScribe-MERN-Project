@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from './Navbar';
+import DashboardNavbar from './DashboardNavbar';
 import Sidebar from '../Sidebar';
 import PatSidebar from '../PatSidebar';
 import { useAuth } from '../../contexts/useAuth';
@@ -79,7 +79,7 @@ const DashboardLayout = ({ children, userType = 'doctor' }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
       >
-        <Navbar />
+        <DashboardNavbar userType={userType} />
       </motion.div>
       <div className="flex flex-1 overflow-hidden mt-4 backdrop-blur-xl relative">
         {/* Mobile Sidebar Toggle Button */}

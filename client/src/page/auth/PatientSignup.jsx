@@ -6,6 +6,7 @@ const PatientSignup = () => {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
+        mobile: '',  // Added mobile field
         password: '',
         confirmPassword: '',
         agreeTerms: false
@@ -42,6 +43,12 @@ const PatientSignup = () => {
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Email address is invalid';
         }
+        
+        if (!formData.mobile) {
+            newErrors.mobile = 'Mobile number is required';
+        } else if (!/^\d{10}$/.test(formData.mobile)) {
+            newErrors.mobile = 'Please enter a valid 10-digit mobile number';
+        }
 
         if (!formData.password) {
             newErrors.password = 'Password is required';
@@ -74,6 +81,7 @@ const PatientSignup = () => {
                     id: 'p123',
                     name: formData.fullName,
                     email: formData.email,
+                    mobile: formData.mobile,
                     userType: 'patient'
                 };
 
@@ -123,6 +131,22 @@ const PatientSignup = () => {
                         placeholder="example@email.com"
                     />
                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                </div>
+                
+                <div>
+                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">
+                        Mobile Number
+                    </label>
+                    <input
+                        type="tel"
+                        id="mobile"
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 rounded-lg border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                        placeholder="1234567890"
+                    />
+                    {errors.mobile && <p className="mt-1 text-sm text-red-500">{errors.mobile}</p>}
                 </div>
 
                 <div>

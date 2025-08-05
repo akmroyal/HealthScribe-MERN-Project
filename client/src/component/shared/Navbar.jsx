@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,15 +8,34 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const menuRef = useRef(null);
 
   useEffect(() => {
     // Check if user is logged in
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
   }, [location.pathname]); // Re-check when route changes
+  
+  // Handle click outside to close menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMenuOpen && menuRef.current && !menuRef.current.contains(event.target) && 
+          !event.target.closest('button[aria-label="Toggle menu"]')) {
+        setIsMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  
+
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null);
@@ -30,11 +49,11 @@ const Navbar = () => {
     if (section) {
       // Close menu when navigating
       setIsMenuOpen(false);
-      
+
       // Get the height of the navbar for offset
       const navbarHeight = 100; // Approximate height, adjust as needed
       const sectionTop = section.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
-      
+
       window.scrollTo({
         top: sectionTop,
         behavior: 'smooth'
@@ -46,7 +65,7 @@ const Navbar = () => {
     <nav className="flex items-center justify-between py-4 px-6 md:px-16 bg-teal-900/20 backdrop-blur-lg border border-white/10 rounded-full mx-4 md:mx-12 mt-4 sticky top-4 z-50 shadow-lg shadow-teal-900/20 hover:bg-teal-900/25 transition-all duration-300 backdrop-saturate-150 before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/10 before:to-transparent before:z-[-1]">
       {/* Logo */}
       <Logo />
-      
+
       {/* Navigation Menu */}
       <div className="hidden md:flex items-center gap-8 mx-4 relative z-10">
         <a onClick={(e) => scrollToSection(e, '#')} href="#" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 hover:shadow-sm hover:shadow-lime-400/20 px-2 py-1">Home</a>
@@ -97,7 +116,7 @@ const Navbar = () => {
               <Link to={user.userType === 'doctor' ? '/dashboard' : '/patient'} className="text-white hover:text-lime-400 transition-colors duration-300">
                 Dashboard
               </Link>
-              <button 
+              <button
                 onClick={handleLogout}
                 className="text-white bg-red-500/20 hover:bg-red-500/30 px-4 py-1 rounded-full transition-colors duration-300"
               >
@@ -114,8 +133,9 @@ const Navbar = () => {
 
       {/* Mobile menu button */}
       <div className="md:hidden relative z-50">
-        <button 
-          onClick={toggleMenu} 
+        <button
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
           className="text-white hover:text-lime-400 transition-colors duration-300 p-2 rounded-full bg-teal-800/20 border border-teal-700/20 hover:bg-teal-800/30"
         >
           {isMenuOpen ? (
@@ -129,11 +149,12 @@ const Navbar = () => {
           )}
         </button>
       </div>
-      
+
       {/* Mobile menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
+          <motion.div
+            ref={menuRef}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -150,7 +171,7 @@ const Navbar = () => {
                   <a onClick={(e) => scrollToSection(e, '#testimonials')} href="#testimonials" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Testimonials</a>
                 </>
               )}
-              
+
               {/* Authentication items */}
               {!user ? (
                 <>
@@ -163,7 +184,7 @@ const Navbar = () => {
                 <>
                   <Link to="/" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Home</Link>
                   <Link to={user.userType === 'doctor' ? '/dashboard' : '/patient'} className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Dashboard</Link>
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="text-white/90 font-medium hover:text-red-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-red-800/30 text-left"
                   >
