@@ -1,10 +1,49 @@
 import React from 'react';
+import { useState,useRef } from 'react';
 import { motion } from 'framer-motion';
 import DashboardLayout from '../../component/shared/DashboardLayout';
 import { useAuth } from '../../contexts/useAuth';
+import useAudioStreamer from '../../hooks/UseAusdioStreamer';
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
+
+  const [isRecording, setIsRecording] = useState(false);
+  const chunksRef = useRef([]);
+
+  const handleAudioChunk = (chunk) => {
+    console.log('Received Chunk:', chunk);
+    chunksRef.current.push(chunk); // Save chunks locally
+  };
+
+  const { startRecording, stopRecording } = useAudioStreamer(handleAudioChunk,2.0);
+
+  const handleStart = () => {
+    setIsRecording(true);
+    startRecording();
+  };
+
+  const handleStop = () => {
+    setIsRecording(false);
+    stopRecording();
+
+    // After stopping, assemble all chunks into a single Blob
+    const audioBlob = new Blob(chunksRef.current, { type: 'audio/mp4' });
+    const audioURL = URL.createObjectURL(audioBlob);
+
+    // Download the recorded audio
+    const a = document.createElement('a');
+    a.href = audioURL;
+    a.download = 'recorded_audio.mp4';
+    a.click();
+
+    // Clear chunks after saving
+    chunksRef.current = [];
+  };
+
+
+
+
   // These stats will be used in the dashboard display
   const stats = {
     patients: 24,
@@ -48,7 +87,14 @@ const Dashboard = () => {
             className="bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-teal-800 transition-colors duration-200 flex items-center space-x-2"
           >
             <span className="text-2xl">➕</span>
-            <span className="text-lg">Start new recording</span>
+            <div>
+              {!isRecording?( <button onClick={handleStart} className="text-lg">Start new recording</button>):
+              ( <button onClick={handleStop} className="text-lg">Stop and download</button>)
+
+              }
+
+            </div>
+           
           </motion.button>
         </motion.div>
       </div>
