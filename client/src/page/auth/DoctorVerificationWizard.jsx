@@ -30,6 +30,8 @@ const DoctorVerificationWizard = ({ onComplete, initialData = {} }) => {
     ...initialData,
     // Additional verification fields
     mobile: '',
+    password: '',
+    confirmPassword: '',
     yearsOfExperience: '',
     hospitalAffiliation: '',
     boardCertification: '',
@@ -57,6 +59,9 @@ const DoctorVerificationWizard = ({ onComplete, initialData = {} }) => {
         else if (!/^\d{10}$/.test(formData.mobile)) newErrors.mobile = "Please enter a valid 10-digit mobile number";
         if (!formData.email?.trim()) newErrors.email = "Email is required";
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Please enter a valid email";
+        if (!formData.password) newErrors.password = 'Password is required';
+        else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters long';
+        if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
         break;
         
       case 1: // Professional Information
@@ -163,12 +168,11 @@ const DoctorVerificationWizard = ({ onComplete, initialData = {} }) => {
                 name="fullName"
                 value={formData.fullName || ''}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 rounded-lg border ${errors.fullName ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.fullName ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                 placeholder="Dr. John Smith"
               />
               {errors.fullName && <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
             </div>
-            
             <div>
               <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
               <input
@@ -177,12 +181,11 @@ const DoctorVerificationWizard = ({ onComplete, initialData = {} }) => {
                 name="mobile"
                 value={formData.mobile || ''}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 rounded-lg border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                 placeholder="1234567890"
               />
               {errors.mobile && <p className="mt-1 text-sm text-red-500">{errors.mobile}</p>}
             </div>
-            
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
               <input
@@ -191,11 +194,37 @@ const DoctorVerificationWizard = ({ onComplete, initialData = {} }) => {
                 name="email"
                 value={formData.email || ''}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                 placeholder="doctor@example.com"
                 readOnly={!!initialData.email}
               />
               {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password || ''}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                placeholder="••••••••"
+              />
+              {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+            </div>
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword || ''}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                placeholder="••••••••"
+              />
+              {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
             </div>
           </div>
         );
