@@ -18,7 +18,8 @@ const AuthCheck = ({ children, requiredUserType }) => {
       }
       
       if (requiredUserType && currentUser.userType !== requiredUserType) {
-        navigate(currentUser.userType === 'doctor' ? '/dashboard' : '/patient');
+        const type = (currentUser.userType || '').toLowerCase();
+        navigate(type === 'doctor' ? '/doctor' : '/patient');
         return;
       }
       

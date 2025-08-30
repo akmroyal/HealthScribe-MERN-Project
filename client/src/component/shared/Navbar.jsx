@@ -62,7 +62,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between py-4 px-6 md:px-16 bg-teal-900/20 backdrop-blur-lg border border-white/10 rounded-full mx-4 md:mx-12 mt-4 sticky top-4 z-50 shadow-lg shadow-teal-900/20 hover:bg-teal-900/25 transition-all duration-300 backdrop-saturate-150 before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/10 before:to-transparent before:z-[-1]">
+    <nav className="flex items-center justify-between py-3 sm:py-4 px-4 sm:px-6 md:px-16 bg-teal-900/20 backdrop-blur-lg border border-white/10 rounded-full mx-2 sm:mx-4 md:mx-12 mt-4 sticky top-4 z-50 shadow-lg shadow-teal-900/20 hover:bg-teal-900/25 transition-all duration-300 backdrop-saturate-150 before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/10 before:to-transparent before:z-[-1]">
       {/* Logo */}
       <Logo />
 
@@ -81,7 +81,7 @@ const Navbar = () => {
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-4 relative z-10">
+      <div className="flex items-center gap-2 sm:gap-4 relative z-10">
         {!user ? (
           <>
             {/* Show these buttons when not logged in */}
@@ -95,11 +95,8 @@ const Navbar = () => {
             </div>
             {/* Mobile view */}
             <div className="md:hidden flex items-center gap-2">
-              <Link to="/auth-options" className="text-white border border-white/20 px-4 py-1 rounded-full hover:bg-white/10 transition-colors">
+              <Link to="/auth-options" className="text-white border border-white/20 px-3 py-1.5 rounded-full hover:bg-white/10 transition-colors text-sm whitespace-nowrap">
                 Sign In
-              </Link>
-              <Link to="/doctor/signup" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium px-4 py-1 rounded-full hover:shadow-md hover:shadow-lime-500/30 transition-all duration-300 border border-white/20 backdrop-blur-md">
-                Get Started
               </Link>
             </div>
           </>
@@ -124,31 +121,54 @@ const Navbar = () => {
               </button>
             </div>
             {/* Mobile view */}
-            <Link to={user.userType === 'doctor' ? '/dashboard' : '/patient'} className="md:hidden bg-teal-600 text-white font-medium px-4 py-1 rounded-full">
+            <Link to={user.userType === 'doctor' ? '/dashboard' : '/patient'} className="md:hidden bg-teal-600 text-white font-medium px-3 py-1.5 rounded-full text-sm whitespace-nowrap">
               Dashboard
             </Link>
           </>
         )}
       </div>
 
-      {/* Mobile menu button */}
-      <div className="md:hidden relative z-50">
-        <button
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-          className="text-white hover:text-lime-400 transition-colors duration-300 p-2 rounded-full bg-teal-800/20 border border-teal-700/20 hover:bg-teal-800/30"
-        >
-          {isMenuOpen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
-      </div>
+      {/* Mobile menu button - moved outside conditional to always show when not logged in */}
+      {!user && (
+        <div className="md:hidden relative z-50">
+          <button
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+            className="text-white hover:text-lime-400 transition-colors duration-300 p-2 rounded-full bg-teal-800/20 border border-teal-700/20 hover:bg-teal-800/30"
+          >
+            {isMenuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+      )}
+
+      {/* Mobile menu button for logged in users */}
+      {user && (
+        <div className="md:hidden relative z-50">
+          <button
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+            className="text-white hover:text-lime-400 transition-colors duration-300 p-2 rounded-full bg-teal-800/20 border border-teal-700/20 hover:bg-teal-800/30"
+          >
+            {isMenuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+      )}
 
       {/* Mobile menu */}
       <AnimatePresence>
@@ -178,7 +198,7 @@ const Navbar = () => {
                   <Link to="/" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Home</Link>
                   <Link to="/patient/login" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Patient Login</Link>
                   <Link to="/doctor/login" className="text-white/90 font-medium hover:text-lime-400 transition-colors duration-300 py-2 px-4 rounded-lg hover:bg-teal-800/50">Doctor Login</Link>
-                  <Link to="/patient/signup" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium py-3 px-6 rounded-lg text-center hover:shadow-md hover:shadow-lime-500/30">Sign Up</Link>
+                  <Link to="/auth-options" className="bg-gradient-to-r from-teal-500 to-lime-500 text-white font-medium py-3 px-6 rounded-lg text-center hover:shadow-md hover:shadow-lime-500/30">Get Started</Link>
                 </>
               ) : (
                 <>

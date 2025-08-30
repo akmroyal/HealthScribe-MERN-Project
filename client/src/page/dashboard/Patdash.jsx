@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import DashboardLayout from '../../component/shared/DashboardLayout';
-import { useAuth } from '../../contexts/useAuth';
+import DashboardLayout from '../../component/shared/DashboardLayout_Clean';
+// import { useAuth } from '../../contexts/useAuth';
 
 const Patdash = () => {
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
   const stats = {
     appointments: 2,
     prescriptions: 3,
@@ -13,13 +13,13 @@ const Patdash = () => {
   };
   
   // Format last login time
-  const formatLastLogin = (timestamp) => {
-    if (!timestamp) return 'First login';
-    return new Date(timestamp).toLocaleString();
-  };
+  // const formatLastLogin = (timestamp) => {
+  //   if (!timestamp) return 'First login';
+  //   return new Date(timestamp).toLocaleString();
+  // };
 
   return (
-    <DashboardLayout userType="patient">
+    <DashboardLayout>
       {/* Welcome Message with Last Login */}
       <motion.div
         className="mb-6 bg-white/10 p-4 rounded-lg"
@@ -27,10 +27,10 @@ const Patdash = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-xl font-semibold text-white">Welcome back, {currentUser?.name || 'Patient'}!</h2>
-        <p className="text-sm text-white/70">
+        {/* <h2 className="text-xl font-semibold text-white">Welcome back, {currentUser?.name || 'Patient'}!</h2> */}
+        {/* <p className="text-sm text-white/70">
           Last login: {formatLastLogin(currentUser?.lastLogin)}
-        </p>
+        </p> */}
       </motion.div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

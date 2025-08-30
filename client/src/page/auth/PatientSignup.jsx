@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthLayout from '../../component/shared/AuthLayout';
+import { useAuth } from '../../contexts/useAuth';
 
 const PatientSignup = () => {
     const [formData, setFormData] = useState({
@@ -13,7 +14,11 @@ const PatientSignup = () => {
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [errorDetail, setErrorDetail] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
+    const { register } = useAuth();
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -68,28 +73,40 @@ const PatientSignup = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (validateForm()) {
-            setIsLoading(true);
+        if (!validateForm()) return;
 
-            // For now, just simulate a registration process
-            setTimeout(() => {
-                // Store user data in localStorage for authentication
-                const userData = {
-                    id: 'p123',
-                    name: formData.fullName,
-                    email: formData.email,
-                    mobile: formData.mobile,
-                    userType: 'patient'
-                };
+        setIsLoading(true);
+        setError('');
+        setErrorDetail('');
+        setSuccessMessage('');
 
-                localStorage.setItem('user', JSON.stringify(userData));
+        try {
+            // Transform to backend contract
+            const backendData = {
+                email: formData.email,
+                password: formData.password,
+                full_name: formData.fullName,
+                mob_no: formData.mobile,
+            };
 
-                setIsLoading(false);
-                navigate('/patient');
-            }, 1000);
+            const result = await register(backendData, 'patient');
+
+            if (result.success) {
+                setSuccessMessage('🎉 Registration successful! Welcome to HealthScribe!');
+                setTimeout(() => navigate('/patient'), 1500);
+            } else {
+                setError(result.error || 'Registration failed. Please try again.');
+                const detail = result?.server?.error || result?.server?.message;
+                if (typeof detail === 'string') setErrorDetail(detail);
+            }
+        } catch (err) {
+            console.error('Registration error:', err);
+            setError('Network error. Please check your connection and try again.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -100,6 +117,31 @@ const PatientSignup = () => {
             formType="signup"
             userType="patient"
         >
+            {/* General error */}
+            {error && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm font-medium text-red-800">{error}</p>
+                    {errorDetail && (
+                        <p className="mt-1 text-xs text-red-600/80">Details: {errorDetail}</p>
+                    )}
+                </div>
+            )}
+
+            {/* Success */}
+            {successMessage && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm font-medium text-green-800">{successMessage}</p>
+                </div>
+            )}
+
+            {isLoading ? (
+                <div className="flex items-center justify-center py-12">
+                    <div className="flex flex-col items-center">
+                        <div className="w-16 h-16 border-t-4 border-b-4 border-teal-500 rounded-full animate-spin"></div>
+                        <p className="mt-4 text-teal-600 text-lg font-medium">Processing your information...</p>
+                    </div>
+                </div>
+            ) : (
             <form onSubmit={handleSubmit} className="space-y-5 text-gray-700">
                 <div>
                     <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -111,7 +153,7 @@ const PatientSignup = () => {
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${errors.fullName ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                        className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.fullName ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                         placeholder="Ashutosh Maurya"
                     />
                     {errors.fullName && <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
@@ -127,7 +169,7 @@ const PatientSignup = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                        className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                         placeholder="example@email.com"
                     />
                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
@@ -143,7 +185,7 @@ const PatientSignup = () => {
                         name="mobile"
                         value={formData.mobile}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                        className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                         placeholder="1234567890"
                     />
                     {errors.mobile && <p className="mt-1 text-sm text-red-500">{errors.mobile}</p>}
@@ -159,7 +201,7 @@ const PatientSignup = () => {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                        className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                         placeholder="••••••••"
                     />
                     {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
@@ -175,7 +217,7 @@ const PatientSignup = () => {
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-lg border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                        className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-teal-500`}
                         placeholder="••••••••"
                     />
                     {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
@@ -205,9 +247,10 @@ const PatientSignup = () => {
                     disabled={isLoading}
                     className="w-full bg-teal-600 text-white py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
                 >
-                    {isLoading ? 'Creating Account...' : 'Create Account'}
+                    Create Account
                 </button>
             </form>
+            )}
         </AuthLayout>
     );
 };

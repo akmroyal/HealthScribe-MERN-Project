@@ -1,76 +1,70 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import DashboardNavbar from './DashboardNavbar';
-import Sidebar from '../Sidebar';
-import PatSidebar from '../PatSidebar';
-import { useAuth } from '../../contexts/useAuth';
 
 const DashboardLayout = ({ children, userType = 'doctor' }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 768);
-  const [isLoading, setIsLoading] = useState(true);
-  const sidebarRef = useRef(null);
   const navigate = useNavigate();
-  const { currentUser, logout } = useAuth();
 
-  useEffect(() => {
-    // Check if user is logged in
-    if (!currentUser) {
-      navigate('/auth-options');
-      return;
-    }
-    
-    setIsLoading(false);
-    
-    // Check if user type matches the required userType
-    if (currentUser.userType !== userType) {
-      navigate(currentUser.userType === 'doctor' ? '/dashboard' : '/patient');
-      return;
-    }
-    
-    // Handle window resize for sidebar collapse
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setSidebarCollapsed(true);
-      }
-    };
+  // Static user data for now
+  const currentUser = {
+    fullName: 'Dr. John Smith',
+    email: 'doctor@example.com',
+    userType: 'doctor'
+  };
 
-    // Close sidebar when clicking outside on mobile
-    const handleClickOutside = (event) => {
-      if (
-        window.innerWidth < 768 && 
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) && 
-        !sidebarCollapsed
-      ) {
-        setSidebarCollapsed(true);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    document.addEventListener('mousedown', handleClickOutside);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [navigate, sidebarCollapsed, userType, currentUser]);
+  const logout = () => {
+    console.log('Logout clicked (Static mode)');
+    navigate('/auth-options');
+  };
 
-  // Toggle sidebar collapse state
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-teal-700 via-teal-600 to-teal-400">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-t-4 border-b-4 border-teal-200 rounded-full animate-spin"></div>
-          <p className="mt-4 text-white text-lg">Loading...</p>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-teal-700 via-teal-600 to-teal-400">
+      {/* Header */}
+      <header className="bg-white/10 backdrop-blur-sm border-b border-white/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <button
+                onClick={toggleSidebar}
+                className="text-white hover:text-teal-200 transition-colors md:hidden"
+              >
+                <span className="text-xl">☰</span>
+              </button>
+              <h1 className="text-white text-xl font-bold ml-4">
+                HealthScribe - Doctor Dashboard
+              </h1>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <span className="text-white/80 text-sm hidden sm:block">
+                Welcome, {currentUser.fullName}
+              </span>
+              <button
+                onClick={logout}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    );
-  }
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+          {children}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default DashboardLayout;
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-teal-700 via-teal-600 to-teal-400 text-gray-900">

@@ -75,15 +75,15 @@ const Footer = () => {
 
   return (
     <footer className="bg-teal-900 text-white">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-9 gap-8 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-12 sm:pt-16 pb-6 sm:pb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Logo and description */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 sm:col-span-2">
             <Logo />
-            <p className="mt-4 text-gray-300 max-w-md">
+            <p className="mt-3 sm:mt-4 text-gray-300 max-w-md text-sm sm:text-base">
               HealthScribe is an AI-powered medical assistant that transforms doctor-patient conversations into structured clinical notes, saving 60% of documentation time.
             </p>
-            <div className="flex mt-6 space-x-4">
+            <div className="flex mt-4 sm:mt-6 space-x-3 sm:space-x-4">
               {socialLinks.map((item, index) => (
                 <a
                   key={index}
@@ -91,7 +91,9 @@ const Footer = () => {
                   className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
                   <span className="sr-only">{item.name}</span>
-                  {item.icon}
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
+                    {item.icon}
+                  </div>
                 </a>
               ))}
             </div>
@@ -100,13 +102,13 @@ const Footer = () => {
           {/* Footer navigation links */}
           {footerLinks.map((group, groupIndex) => (
             <div key={groupIndex} className="lg:col-span-2">
-              <h3 className="font-semibold text-lg mb-4">{group.title}</h3>
-              <ul className="space-y-3">
+              <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">{group.title}</h3>
+              <ul className="space-y-2 sm:space-y-3">
                 {group.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <a 
                       href={link.href} 
-                      className="text-gray-400 hover:text-white transition-colors duration-300"
+                      className="text-gray-400 hover:text-white transition-colors duration-300 text-sm sm:text-base"
                     >
                       {link.name}
                     </a>
@@ -118,13 +120,13 @@ const Footer = () => {
         </div>
 
         {/* Subscribe section */}
-        <div className="py-8 border-t border-teal-800 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="md:w-1/3">
-              <h3 className="font-semibold text-lg mb-2">Stay Updated</h3>
-              <p className="text-gray-300 text-sm">Get the latest news and updates from HealthScribe</p>
+        <div className="py-6 sm:py-8 border-t border-teal-800 mb-6 sm:mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
+            <div className="lg:w-1/3">
+              <h3 className="font-semibold text-base sm:text-lg mb-2">Stay Updated</h3>
+              <p className="text-gray-300 text-xs sm:text-sm">Get the latest news and updates from HealthScribe</p>
             </div>
-            <div className="md:w-2/3 max-w-lg">
+            <div className="lg:w-2/3 max-w-lg">
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2">
                 <div className="relative flex-grow">
                   <input
@@ -133,12 +135,12 @@ const Footer = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
                     required
-                    className="w-full bg-teal-800/50 text-white placeholder:text-gray-400 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 border border-teal-700"
+                    className="w-full bg-teal-800/50 text-white placeholder:text-gray-400 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 border border-teal-700 text-sm sm:text-base"
                   />
                 </div>
                 <button 
                   type="submit"
-                  className="bg-lime-400 hover:bg-lime-500 text-teal-900 font-medium py-3 px-6 rounded-lg transition-colors duration-300 whitespace-nowrap"
+                  className="bg-lime-400 hover:bg-lime-500 text-teal-900 font-medium py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors duration-300 whitespace-nowrap text-sm sm:text-base"
                 >
                   Subscribe
                 </button>
@@ -149,18 +151,18 @@ const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-teal-800 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
+        <div className="pt-6 sm:pt-8 border-t border-teal-800 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
+          <p className="text-gray-400 text-xs sm:text-sm">
             © {currentYear} HealthScribe. All rights reserved.
           </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="/privacy" className="text-gray-400 text-sm hover:text-white transition-colors duration-300">
+          <div className="flex flex-wrap justify-center sm:justify-end space-x-4 sm:space-x-6">
+            <a href="/privacy" className="text-gray-400 text-xs sm:text-sm hover:text-white transition-colors duration-300">
               Privacy Policy
             </a>
-            <a href="/terms" className="text-gray-400 text-sm hover:text-white transition-colors duration-300">
+            <a href="/terms" className="text-gray-400 text-xs sm:text-sm hover:text-white transition-colors duration-300">
               Terms of Service
             </a>
-            <a href="/contact" className="text-gray-400 text-sm hover:text-white transition-colors duration-300">
+            <a href="/contact" className="text-gray-400 text-xs sm:text-sm hover:text-white transition-colors duration-300">
               Contact
             </a>
           </div>

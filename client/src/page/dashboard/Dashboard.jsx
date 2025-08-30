@@ -1,55 +1,36 @@
 import React from 'react';
-import { useState,useRef } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import DashboardLayout from '../../component/shared/DashboardLayout';
-import { useAuth } from '../../contexts/useAuth';
-import useAudioStreamer from '../../hooks/UseAusdioStreamer';
+import DashboardLayout from '../../component/shared/DashboardLayout_Clean';
 
 const Dashboard = () => {
-  const { currentUser } = useAuth();
-
   const [isRecording, setIsRecording] = useState(false);
-  const chunksRef = useRef([]);
 
-  const handleAudioChunk = (chunk) => {
-    console.log('Received Chunk:', chunk);
-    chunksRef.current.push(chunk); // Save chunks locally
-  };
-
-  const { startRecording, stopRecording } = useAudioStreamer(handleAudioChunk,2.0);
-
+  // Static handler functions for now
   const handleStart = () => {
     setIsRecording(true);
-    startRecording();
+    console.log('Recording started (Static mode)');
   };
 
   const handleStop = () => {
     setIsRecording(false);
-    stopRecording();
-
-    // After stopping, assemble all chunks into a single Blob
-    const audioBlob = new Blob(chunksRef.current, { type: 'audio/mp4' });
-    const audioURL = URL.createObjectURL(audioBlob);
-
-    // Download the recorded audio
-    const a = document.createElement('a');
-    a.href = audioURL;
-    a.download = 'recorded_audio.mp4';
-    a.click();
-
-    // Clear chunks after saving
-    chunksRef.current = [];
+    console.log('Recording stopped (Static mode)');
   };
 
-
-
-
-  // These stats will be used in the dashboard display
+  // Static stats data
   const stats = {
     patients: 24,
     appointments: 12,
+    recordings: 8,
+    hours: 156,
     pendingReports: 5,
     revenue: 4580
+  };
+
+  // Static user data
+  const currentUser = {
+    fullName: 'Dr. John Smith',
+    email: 'doctor@example.com'
   };
   
   // Format last login time
@@ -59,7 +40,7 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout userType="doctor">
+    <DashboardLayout>
       {/* Start Recording Button - Top Right */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
         <motion.div
@@ -68,12 +49,12 @@ const Dashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
         >
-          <p className="text-sm">
+          {/* <p className="text-sm">
             Welcome back, {currentUser?.name || 'Doctor'}! 
             <span className="ml-2 text-xs opacity-70">
               Last login: {formatLastLogin(currentUser?.lastLogin)}
             </span>
-          </p>
+          </p> */}
         </motion.div>
         
         <motion.div

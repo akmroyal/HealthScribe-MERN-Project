@@ -90,19 +90,19 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-24 px-6 md:px-12 relative bg-teal-50">
+    <section id="features" className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 md:px-12 relative bg-teal-50">
       <div className="max-w-7xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="text-4xl font-bold text-teal-900 mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-teal-900 mb-4">
             Why Healthcare Teams Choose HealthScribe
           </h2>
-          <div className="h-1 w-24 bg-lime-400 mx-auto mb-6"></div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="h-1 w-20 sm:w-24 bg-lime-400 mx-auto mb-4 sm:mb-6"></div>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
             Powerful tools designed for modern healthcare professionals
           </p>
         </motion.div>
@@ -111,7 +111,7 @@ const Features = () => {
           variants={containerVariants}
           initial="hidden"
           animate={controls}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         >
           {features.map((feature, index) => (
             <motion.div 
@@ -123,17 +123,17 @@ const Features = () => {
                 rotateY: 2,
                 boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
               }}
-              className="bg-white shadow-lg rounded-xl p-8 transition-all duration-300 border border-gray-100 group"
+              className="bg-white shadow-lg rounded-xl p-6 sm:p-8 transition-all duration-300 border border-gray-100 group"
             >
               <motion.div 
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="w-16 h-16 bg-gradient-to-r from-teal-500 to-lime-400 rounded-xl flex items-center justify-center text-white mx-auto mb-6 p-3"
+                className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-teal-500 to-lime-400 rounded-xl flex items-center justify-center text-white mx-auto mb-4 sm:mb-6 p-2 sm:p-3"
               >
                 {feature.icon}
               </motion.div>
-              <h3 className="text-xl font-bold text-teal-900 mb-4">{feature.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+              <h3 className="text-lg sm:text-xl font-bold text-teal-900 mb-3 sm:mb-4">{feature.title}</h3>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </motion.div>

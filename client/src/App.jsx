@@ -25,7 +25,7 @@ const App = () => {
         <Route path="/doctor/signup" element={<DoctorSignup />} />
         
         {/* Protected dashboard routes */}
-        <Route path="/dashboard" element={
+        <Route path="/doctor" element={
           <AuthCheck requiredUserType="doctor">
             <Dashboard />
           </AuthCheck>

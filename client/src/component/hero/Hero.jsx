@@ -61,21 +61,21 @@ const HeroSection = () => {
 
       <Navbar />
 
-      <main className="relative z-10 px-6 md:px-12 pt-10 md:pt-16">
+      <main className="relative z-10 px-4 sm:px-6 md:px-12 pt-8 sm:pt-10 md:pt-16">
         <motion.div 
           ref={ref}
           initial="hidden"
           animate={controls}
           variants={containerVariants}
-          className="flex flex-col-reverse md:flex-row items-center md:items-start justify-between max-w-7xl mx-auto gap-8 md:gap-4"
+          className="flex flex-col-reverse lg:flex-row items-center lg:items-start justify-between max-w-7xl mx-auto gap-8 lg:gap-4"
         >
           {/* Left Content */}
-          <div className="w-full md:w-1/2 mt-10 md:mt-0 md:pt-10">
+          <div className="w-full lg:w-1/2 mt-6 sm:mt-10 lg:mt-0 lg:pt-10">
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center px-4 py-2 bg-teal-800/40 rounded-full border border-teal-700/40 text-sm text-white mb-6"
+              className="inline-flex items-center px-3 sm:px-4 py-2 bg-teal-800/40 rounded-full border border-teal-700/40 text-xs sm:text-sm text-white mb-4 sm:mb-6"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-lime-400" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 mr-2 text-lime-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
               Online Platforms offers Transcriptions
@@ -83,7 +83,7 @@ const HeroSection = () => {
 
             <motion.h1 
               variants={itemVariants}
-              className="text-5xl md:text-6xl font-bold text-white leading-tight mb-8"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 sm:mb-8"
             >
               Smarter AI <br />
               Documentation Starts <br />
@@ -92,28 +92,28 @@ const HeroSection = () => {
 
             <motion.p 
               variants={itemVariants}
-              className="text-lg text-gray-300 mb-10 max-w-lg"
+              className="text-base sm:text-lg text-gray-300 mb-8 sm:mb-10 max-w-lg"
             >
               HealthScribe is an AI-powered medical assistant that transforms doctor-patient conversations into structured clinical notes, saving 60% of documentation time.
             </motion.p>
 
             <motion.div 
               variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4"
             >
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-lime-400 hover:bg-lime-500 text-teal-900 font-medium rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-lime-400/30"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-lime-400 hover:bg-lime-500 text-teal-900 font-medium rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-lime-400/30 text-sm sm:text-base"
               >
                 Get Started
               </motion.button>
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-teal-700/50 hover:bg-teal-700/70 text-white font-medium rounded-full border border-teal-600/50 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-teal-700/50 hover:bg-teal-700/70 text-white font-medium rounded-full border border-teal-600/50 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                 </svg>
                 Watch a Demo
@@ -124,7 +124,7 @@ const HeroSection = () => {
           {/* Right Content - Doctor Image & Dashboard */}
           <motion.div 
             variants={itemVariants}
-            className="w-full md:w-1/2 relative"
+            className="w-full lg:w-1/2 relative flex justify-center lg:justify-end"
           >
             <motion.img
               initial={{ opacity: 0, y: 20 }}
@@ -132,15 +132,15 @@ const HeroSection = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               src="/Doctor.png"
               alt="Doctor"
-              className="w-2/3 mx-auto relative"
+              className="w-3/4 sm:w-2/3 lg:w-full max-w-md relative"
             />
 
-            {/* Dashboard elements */}
+            {/* Dashboard elements - Hidden on mobile and small tablets, visible on larger screens */}
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="absolute top-10 right-0 md:-right-10 bg-teal-800/40 backdrop-blur-md p-4 rounded-xl border border-teal-700/40 shadow-lg w-48 md:w-64 hidden md:block"
+              className="absolute top-6 sm:top-10 right-0 xl:-right-10 bg-teal-800/40 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-teal-700/40 shadow-lg w-40 sm:w-48 lg:w-56 xl:w-64 hidden lg:block"
             >
               <div className="text-white text-xs mb-2">Dashboard Report</div>
               <div className="bg-teal-900/50 p-2 rounded-lg">
@@ -169,7 +169,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.9 }}
-              className="absolute bottom-5 right-20 md:-right-10 bg-teal-800/40 backdrop-blur-md p-4 rounded-xl border border-teal-700/40 shadow-lg w-48 md:w-64 hidden md:block"
+              className="absolute bottom-2 sm:bottom-5 right-10 sm:right-20 xl:-right-10 bg-teal-800/40 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-teal-700/40 shadow-lg w-40 sm:w-48 lg:w-56 xl:w-64 hidden lg:block"
             >
               <div className="flex justify-between items-center mb-3">
                 <div className="text-white text-xs">Your daily progress</div>
@@ -240,16 +240,16 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
-          className="mt-20 md:mt-40 border-t border-teal-700/50 pt-8 pb-10"
+          className="mt-12 sm:mt-20 lg:mt-40 border-t border-teal-700/50 pt-6 sm:pt-8 pb-8 sm:pb-10"
         >
-          <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-8 md:gap-12">
+          <div className="max-w-7xl mx-auto flex flex-wrap justify-center sm:justify-between items-center gap-4 sm:gap-8 lg:gap-12">
             {/* Using emoji placeholders for logo examples */}
             {["🏥", "🩺", "💊", "🔬", "🧬", "💉"].map((logo, index) => (
               <motion.div 
                 key={index}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="h-10 w-10 flex items-center justify-center text-2xl bg-teal-800/30 rounded-full p-2 opacity-70 hover:opacity-100 transition-opacity duration-300"
+                className="h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center text-xl sm:text-2xl bg-teal-800/30 rounded-full p-2 opacity-70 hover:opacity-100 transition-opacity duration-300"
               >
                 {logo}
               </motion.div>
