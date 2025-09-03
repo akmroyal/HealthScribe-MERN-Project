@@ -13,14 +13,14 @@ export const signupDoctor = async (req, res) => {
             user_metadata: { role: 'Doctor' },
         });
 
-            if (authError) {
-                const msg = (authError.message || '').toLowerCase();
-                if (msg.includes('fetch failed') || msg.includes('timeout') || msg.includes('und_err_connect_timeout')) {
-                    console.error('Supabase auth network error:', authError);
-                    return res.status(503).json({ error: 'Authentication service is unreachable. Please try again later.' });
-                }
-                return res.status(400).json({ error: authError.message });
+        if (authError) {
+            const msg = (authError.message || '').toLowerCase();
+            if (msg.includes('fetch failed') || msg.includes('timeout') || msg.includes('und_err_connect_timeout')) {
+                console.error('Supabase auth network error:', authError);
+                return res.status(503).json({ error: 'Authentication service is unreachable. Please try again later.' });
             }
+            return res.status(400).json({ error: authError.message });
+        }
 
         // insert additional user details into the table
         const userId = user?.user?.id;
@@ -177,7 +177,32 @@ export const me = async (req, res) => {
 };
 
 // Logout placeholder (JWT-based)
-export const logout = async (_req, res) => {
-    return res.status(200).json({ message: 'Logged out' });
+export const logout = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization || '';
+        const token = authHeader.startsWith('Bearer') ? authHeader.slice(7) : null;
+        if (!token) {
+            return res.status(401).json({ error: "Missing or invalid Authorization token" });
+        }
+
+        const { data: userData, error: getUserError } = await supabase.auth.getUser(token);
+        if (getUserError || !userData?.user) {
+            return res.status(401).json({ error: "Invalid or expired token" });
+        }
+        const userId = userData.user.id;
+
+        if (supabase.auth?.admin?.invalidateUserRefreshTokens) {
+            await supabase.auth.admin.invalidateUserRefreshTokens(userId);
+        } else if (supabase.auth?.admin?.invalidate_user_refresh_tokens) {
+            await supabase.auth.admin.invalidate_user_refresh_tokens(userId);
+        } else {
+            console.warn('Supabase admin session invalidation API not available in this SDK version.');
+        }
+
+        return res.status(200).json({ message: 'Logged out' });
+    } catch (error) {
+        console.error('Unexpected error during logout:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
 };
 
