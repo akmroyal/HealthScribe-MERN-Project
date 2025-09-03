@@ -15,6 +15,14 @@ export default {
         background: '#134e4a', // teal-900
         textLight: '#f3f4f6',  // gray-100
         textDark: '#1f2937',   // gray-800
+      },
+      width: {
+        '70': '17.5rem',
+        '80': '20rem',
+      },
+      margin: {
+        '70': '17.5rem',
+        '80': '20rem',
       }
     },
   },

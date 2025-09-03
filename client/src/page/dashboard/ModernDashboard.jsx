@@ -7,10 +7,10 @@ import {
   FiFilter, FiStar
 } from 'react-icons/fi';
 
-const Dashboard = () => {
+const ModernDashboard = () => {
   const [isRecording, setIsRecording] = useState(false);
 
-  // Recording handlers
+  // Recording handlers 
   const handleStartRecording = () => {
     setIsRecording(true);
     console.log('Recording started');
@@ -369,4 +369,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default ModernDashboard;

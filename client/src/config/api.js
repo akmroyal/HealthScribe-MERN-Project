@@ -32,10 +32,13 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    config.headers = config.headers || {};
+    const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+
     return config;
   },
   (error) => {
@@ -47,11 +50,16 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('authToken');
+    const status = error.response?.status;
+    if (status === 401) {
+      // clear all session-related keys used by AuthProvider
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('expiresAt');
+      localStorage.removeItem('userProfile'); 
+      localStorage.removeItem('userRole');   
       localStorage.removeItem('userType');
-      localStorage.removeItem('userData');
-      
+
       if (typeof window !== 'undefined') {
         window.location.href = '/auth-options';
       }
